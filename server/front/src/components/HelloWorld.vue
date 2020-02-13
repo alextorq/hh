@@ -4,46 +4,56 @@
       <el-header>
         <el-select v-model="value" placeholder="Select">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+            v-for="item in categories"
+            :key="item._id"
+            :label="item.title"
+            :value="item._id">
           </el-option>
         </el-select>
       </el-header>
-      <el-main>Main</el-main>
+      <el-main>
+
+
+      </el-main>
     </el-container>
   </div>
 </template>
 
+
 <script>
-import axios from 'axios'
+import { getVacancies, getCategories, getCategoriesWithVacancies } from '../repository/index';
+import parsePrices from '../utils/price';
+
+// function groupVacancies(vacancies = []) {
+//   const result = {};
+//   // eslint-disable-next-line no-restricted-syntax
+//   for (const item of vacancies) {
+//     if (item.category) {
+//       if (!result[item.category]) {
+//         result[item.category] = [];
+//       }
+//       result[item.category].push(item);
+//     }
+//   }
+//   return result;
+// }
 
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      options: [{
-        value: 'Option1',
-        label: 'Option1',
-      }, {
-        value: 'Option2',
-        label: 'Option2',
-      }, {
-        value: 'Option3',
-        label: 'Option3',
-      }, {
-        value: 'Option4',
-        label: 'Option4',
-      }, {
-        value: 'Option5',
-        label: 'Option5',
-      }],
+      categories: [],
+      vacancies: [],
+      categories_with: [],
       value: '',
     };
   },
-  props: {
-    msg: String,
+  async mounted() {
+    this.categories = await getCategories();
+    this.vacancies = await getVacancies();
+    this.categories_with = await getCategoriesWithVacancies();
+    console.log(this.vacancies.map((item) => parsePrices(item.price))
+      .filter((item) => item.length > 0));
   },
 };
 </script>
