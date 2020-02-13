@@ -24,4 +24,13 @@ router.get("/list",  async function (request, response) {
     }
 });
 
+router.get("/list_with_vacancies",  async function (request, response) {
+  try {
+    let results = await Category.find().populate('Vacancies').exec();
+    response.send(results);
+  }catch (err) {
+    errorHandler(err, response);
+  }
+});
+
 module.exports = router;

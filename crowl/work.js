@@ -169,7 +169,7 @@ async function saveResult(listOfProfessions) {
         const category = await Category.create(profession);
         for (let job of profession.jobs) {
             savedBar.increment();
-            const item = Object.assign(job, {category: category.id})
+            const item = Object.assign(job, {category: category._id});
             await Vacancy.create(item)
         }
     }
