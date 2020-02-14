@@ -27,7 +27,7 @@ router.get('/list', async (request, response) => {
 
 router.get('/list_with_vacancies', async (request, response) => {
   try {
-    const results = await Category.find().populate('vacancies');
+    const results = await Category.find().populate('vacancies').exec();
     response.send(results);
   } catch (err) {
     errorHandler(err, response);

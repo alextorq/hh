@@ -18,7 +18,7 @@ function errorHandler(err, response) {
 // Отдаем весь список
 router.get('/list', async (request, response) => {
   try {
-    const results = await Vacancies.find().limit(100);
+    const results = await Vacancies.find().populate('category').limit(100);
     response.send(results);
   } catch (err) {
     errorHandler(err, response);

@@ -12,8 +12,9 @@
         </el-select>
       </el-header>
       <el-main>
-
-
+        <div style="width: 400px; height: 400px;">
+          <allProffesionsVacanies/>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -23,6 +24,7 @@
 <script>
 import { getVacancies, getCategories, getCategoriesWithVacancies } from '../repository/index';
 import parsePrices from '../utils/price';
+import allProffesionsVacanies from './allProffesionsVacanies.vue';
 
 // function groupVacancies(vacancies = []) {
 //   const result = {};
@@ -47,6 +49,9 @@ export default {
       categories_with: [],
       value: '',
     };
+  },
+  components: {
+    allProffesionsVacanies,
   },
   async mounted() {
     this.categories = await getCategories();
