@@ -1,29 +1,34 @@
-<template>
-  <div>
-
-  </div>
-</template>
-
 <script>
-import { Bar } from 'vue-chartjs'
+import { Doughnut } from 'vue-chartjs';
+// import color from '../utils/color.js'
 
 export default {
-  extends: Bar,
+  extends: Doughnut,
   data() {
     return {
-      options: {}
-    }
+      options: {},
+    };
   },
-  name: "allProffesionsVacanies",
+  name: 'allProffesionsVacanies',
   props: {
     allVacansies: {
 
-    }
+    },
   },
-  mounted () {
-    this.renderChart(data, this.options)
+  mounted() {
+    this.renderChart({
+      datasets: [{
+        data: [10, 20, 30],
+      }],
+      labels: [
+        'Red',
+        'Yellow',
+        'Blue',
+      ],
+    },
+    this.options);
   },
-}
+};
 </script>
 
 <style scoped>

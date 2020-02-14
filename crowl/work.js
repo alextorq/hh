@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const url = require("url");
 const dotenv = require('dotenv');
-const appRoot  = require('app-root-path');
+const appRoot = require('app-root-path');
 const mongoose = require(appRoot + '/db/connection');
 const Vacancy = require(appRoot + '/db/models/vacancies');
 const Category = require(appRoot + '/db/models/categories');
@@ -40,7 +40,7 @@ function checkInBlackList(url = '') {
     let status = false;
     for (const item of blackListDomains) {
         if (url.startsWith(item)) {
-            status = true
+            status = true;
         }
     }
     return status;
@@ -89,9 +89,9 @@ async function scrapeVacancies(listOfProfessions) {
                 await page.waitForSelector('.vacancy-serp');
                 let jobs = await page.evaluate(getVacancies, env);
                 scrabeBar.increment();
-                profession.jobs.push(jobs);
+                profession.jobs.push(...jobs);
             }catch (e) {
-                console.error(e)
+                console.error(e);
             }
 
         }
@@ -102,7 +102,7 @@ async function scrapeVacancies(listOfProfessions) {
 async function getPagination(listOfProfessions) {
     function getSize(env) {
         let maxSize = document.querySelector(env.PARSER_SELECTOR_PAGINATION);
-        return maxSize && maxSize.href || null
+        return maxSize && maxSize.href || null;
     }
     prepare.setTotal(listOfProfessions.length);
     for (const [index, item] of listOfProfessions.entries()) {
@@ -112,12 +112,12 @@ async function getPagination(listOfProfessions) {
         }
         await page.waitForSelector(env.PARSER_SELECTOR_PAGINATION);
 
-        let maxPageString = await page.evaluate(getSize, env);
+        const maxPageString = await page.evaluate(getSize, env);
         if (maxPageString) {
             pageParams = url.parse(maxPageString, true);
             let maxPage = +pageParams.query.page;
             for (let i = 0; i <= maxPage; i++) {
-                let paginationPage =  url.format({...pageParams, ...{query: {page: i}}});
+                const paginationPage = url.format({ ...pageParams, ...{query: {page: i}} });
                 item.pages.push(paginationPage);
             }
         }else {
@@ -170,7 +170,7 @@ async function saveResult(listOfProfessions) {
         for (let job of profession.jobs) {
             savedBar.increment();
             const item = Object.assign(job, {category: category._id});
-            await Vacancy.create(item)
+            await Vacancy.create(item);
         }
     }
 }
@@ -185,14 +185,13 @@ async function main() {
     page = await browser.newPage();
     await page.setViewport({
         width: 1920,
-        height: 1080
+        height: 1080,
     });
     await page.setRequestInterception(true);
     page.on('request', (req) => {
         if(ignoredTypes.includes(req.resourceType()) || checkInBlackList(req.url())) {
             req.abort();
-        }
-        else {
+        } else {
             // console.log(req.resourceType())
             // console.log(req.url())
             req.continue();
@@ -204,10 +203,12 @@ async function main() {
     try {
         await getPagination(profs);
         await scrapeVacancies(profs);
-        await browser.close();
-        await saveResult(profs)
+        await saveResult(profs);
     } catch (e) {
-        console.error(e)
+        console.error(e);
+    } finally {
+      await browser.close();
+      await mongoose.connection.close();
     }
 
 
