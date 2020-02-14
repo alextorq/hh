@@ -89,7 +89,7 @@ async function scrapeVacancies(listOfProfessions) {
                 await page.waitForSelector('.vacancy-serp');
                 let jobs = await page.evaluate(getVacancies, env);
                 scrabeBar.increment();
-                profession.jobs.push(jobs);
+                profession.jobs.push(...jobs);
             }catch (e) {
                 console.error(e);
             }
@@ -112,12 +112,12 @@ async function getPagination(listOfProfessions) {
         }
         await page.waitForSelector(env.PARSER_SELECTOR_PAGINATION);
 
-        let maxPageString = await page.evaluate(getSize, env);
+        const maxPageString = await page.evaluate(getSize, env);
         if (maxPageString) {
             pageParams = url.parse(maxPageString, true);
             let maxPage = +pageParams.query.page;
             for (let i = 0; i <= maxPage; i++) {
-                let paginationPage =  url.format({...pageParams, ...{query: {page: i}}});
+                const paginationPage = url.format({ ...pageParams, ...{query: {page: i}} });
                 item.pages.push(paginationPage);
             }
         }else {
