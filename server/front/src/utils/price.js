@@ -15,5 +15,5 @@ export default function parsePrices(price = '') {
       buffer = [];
     }
   }
-  return result;
+  return result.sort((a, b) => a - b);
 }

@@ -1,22 +1,23 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
 
 const CategorySchema = new Schema({
-    link: {
-        type: String,
-        required: false
+  link: {
+    type: String,
+    required: false,
+  },
+  title: {
+    type: String,
+    required: false,
+  },
+  vacancies: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Vacancy',
     },
-    title: {
-        type: String,
-        required: false,
-    },
-    vacancies: [
-        {
-            type: Schema.Types.ObjectId,
-            ref:'Vacancies'
-        }
-    ],
-}, { autoIndex: false, versionKey: false, timestamps:true });
+  ],
+}, { autoIndex: false, versionKey: false, timestamps: true });
 
-const Category = mongoose.model("Category", CategorySchema);
+const Category = mongoose.model('Category', CategorySchema);
 module.exports = Category;
