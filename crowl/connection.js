@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 mongoose.set('debug', true);
 
-mongoose.connect(`${process.env.MONGO_URL}/${process.env.MONGO_DB}`, { useNewUrlParser: true, autoIndex: false, useUnifiedTopology: true }, (err) => {
+mongoose.connect(`${process.env.MONGO_URL}/${process.env.MONGO_DB_PARSE}`, { useNewUrlParser: true, autoIndex: false, useUnifiedTopology: true }, (err) => {
   if (err) return console.log(err);
 });
 

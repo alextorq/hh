@@ -11,20 +11,35 @@ export default {
   },
   name: 'allProffesionsVacanies',
   props: {
-    allVacansies: {
-
+    info: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+  },
+  methods: {
+    formatData(info) {
+      const labels = [];
+      const data = [];
+      info.forEach((currentValue) => {
+        labels.push(currentValue.title);
+        data.push(currentValue.vacancies.length);
+      });
+      return {
+        labels,
+        data,
+      };
     },
   },
   mounted() {
+    const data = this.formatData(this.info);
+    console.log(adaptProf(data));
     this.renderChart({
       datasets: [{
-        data: [10, 20, 30],
+        data: data.data,
       }],
-      labels: [
-        'Red',
-        'Yellow',
-        'Blue',
-      ],
+      labels: data.labels,
     },
     this.options);
   },

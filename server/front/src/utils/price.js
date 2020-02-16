@@ -2,7 +2,7 @@ export default function parsePrices(price = '') {
   const result = [];
   let buffer = [];
   const charCode = [32, 160];
-  // eslint-disable-next-line no-restricted-syntax
+  /* eslint no-restricted-syntax:0 */
   for (const item of price) {
     if (charCode.includes(item.charCodeAt(0)) || (!Number.isNaN(parseInt(item, 10)))) {
       buffer.push(item);

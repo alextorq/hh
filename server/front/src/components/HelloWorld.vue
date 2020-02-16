@@ -12,33 +12,18 @@
         </el-select>
       </el-header>
       <el-main>
-        <div style="width: 400px; height: 400px;">
-          <allProffesionsVacanies/>
+        <div style="width: 1600px; height: 1000px; position: relative;">
+          <averageSalary :info="midlle" />
         </div>
       </el-main>
     </el-container>
   </div>
 </template>
 
-
 <script>
 import { getVacancies, getCategories, getCategoriesWithVacancies } from '../repository/index';
-import parsePrices from '../utils/price';
-import allProffesionsVacanies from './allProffesionsVacanies.vue';
-
-// function groupVacancies(vacancies = []) {
-//   const result = {};
-//   // eslint-disable-next-line no-restricted-syntax
-//   for (const item of vacancies) {
-//     if (item.category) {
-//       if (!result[item.category]) {
-//         result[item.category] = [];
-//       }
-//       result[item.category].push(item);
-//     }
-//   }
-//   return result;
-// }
+import adaptProf from '../utils/midlle';
+import averageSalary from './averageSalary.vue';
 
 export default {
   name: 'HelloWorld',
@@ -46,24 +31,18 @@ export default {
     return {
       categories: [],
       vacancies: [],
-      categories_with: [],
+      midlle: {},
       value: '',
     };
   },
   components: {
-    allProffesionsVacanies,
+    averageSalary,
   },
   async mounted() {
     this.categories = await getCategories();
     this.vacancies = await getVacancies();
-    this.categories_with = await getCategoriesWithVacancies();
-    console.log(this.vacancies.map((item) => parsePrices(item.price))
-      .filter((item) => item.length > 0));
+    const caregoriesWithVacancies = await getCategoriesWithVacancies();
+    this.midlle = adaptProf(caregoriesWithVacancies);
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-
-</style>

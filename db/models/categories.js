@@ -11,6 +11,10 @@ const CategorySchema = new Schema({
     type: String,
     required: false,
   },
+  amount: {
+    type: Number,
+    required: false,
+  },
   vacancies: [
     {
       type: Schema.Types.ObjectId,

@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  lintOnSave: false,
   configureWebpack: {
     entry: path.resolve(__dirname, './server/front/src/main.js'),
     resolve: {
