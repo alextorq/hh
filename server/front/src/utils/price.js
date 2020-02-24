@@ -1,4 +1,4 @@
-export default function parsePrices(price = '') {
+export function parsePrices(price = '') {
   const result = [];
   let buffer = [];
   const charCode = [32, 160];
@@ -16,4 +16,9 @@ export default function parsePrices(price = '') {
     }
   }
   return result.sort((a, b) => a - b);
+}
+
+
+export function formatPrice(price) {
+  return new Intl.NumberFormat('ru-RU').format(price);
 }

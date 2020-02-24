@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const VacancysSchema = new Schema({
+const VacancySchema = new Schema({
   link: {
     type: String,
     required: false,
@@ -23,7 +23,11 @@ const VacancysSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Category',
   },
+  specialization: {
+    type: Schema.Types.ObjectId,
+    ref: 'Specialization',
+  },
 }, { autoIndex: false, versionKey: false, timestamps: true });
 
-const Vacancy = mongoose.model('Vacancy', VacancysSchema, 'vacancies');
+const Vacancy = mongoose.model('Vacancy', VacancySchema, 'vacancies');
 module.exports = Vacancy;

@@ -30,7 +30,7 @@ router.get('/list_with_vacancies', async (request, response) => {
   try {
     const results = await Category.aggregate([
       {
-        $limit: 10000000,
+        $limit: 100,
       },
       {
         $lookup: {
@@ -40,8 +40,29 @@ router.get('/list_with_vacancies', async (request, response) => {
           as: 'vacancies',
         },
       },
+    ]);
+
+    // const results = await Category.find({}).populate('vacancies');
+    response.send(results);
+  } catch (err) {
+    errorHandler(err, response);
+  }
+});
+
+
+router.get('/list_with_specialization', async (request, response) => {
+  try {
+    const results = await Category.aggregate([
       {
-        $limit: 10000000,
+        $limit: 100,
+      },
+      {
+        $lookup: {
+          from: 'specializations',
+          localField: '_id',
+          foreignField: 'category',
+          as: 'specializations',
+        },
       },
     ]);
 

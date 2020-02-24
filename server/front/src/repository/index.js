@@ -13,3 +13,7 @@ export function getVacancies() {
 export function getCategoriesWithVacancies() {
   return axios.get(`${host}category/list_with_vacancies`).then((response) => Object.freeze(response.data));
 }
+
+export function getCategoriesWithSpecialization() {
+  return axios.get(`${host}category/list_with_specialization`).then((response) => Object.freeze(response.data));
+}

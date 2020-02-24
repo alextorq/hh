@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const CategorySchema = new Schema({
+const SpecializationSchema = new Schema({
   link: {
     type: String,
     required: false,
@@ -15,13 +15,11 @@ const CategorySchema = new Schema({
     type: Number,
     required: false,
   },
-  vacancies: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Vacancy',
-    },
-  ],
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+  },
 }, { autoIndex: false, versionKey: false, timestamps: true });
 
-const Category = mongoose.model('Category', CategorySchema, 'categories');
-module.exports = Category;
+const Specialization = mongoose.model('Specialization', SpecializationSchema, 'specializations');
+module.exports = Specialization;

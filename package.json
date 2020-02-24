@@ -4,6 +4,7 @@
   "description": "",
   "main": "crowl/index.js",
   "scripts": {
+    "crawl": "node ./crawl/work.js",
     "run": "node ./index.js",
     "run2": "nodemon ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -28,7 +29,7 @@
     "express-list-endpoints": "^4.0.1",
     "log4js": "^6.1.1",
     "mongoose": "^5.9.1",
-    "puppeteer": "^2.1.0",
+    "puppeteer": "^2.1.1",
     "randomcolor": "^0.5.4",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
