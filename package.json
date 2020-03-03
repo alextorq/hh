@@ -4,8 +4,9 @@
   "description": "",
   "main": "crowl/index.js",
   "scripts": {
+    "crawl": "node ./crawl/work.js",
     "run": "node ./index.js",
-    "run2": "nodemon ./index.js",
+    "server": "nodemon ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -17,7 +18,7 @@
   "dependencies": {
     "app-root-path": "^3.0.0",
     "axios": "^0.19.2",
-    "chart.js": "^2.9.3",
+    "chart.js": "2.5.0",
     "cheerio": "^1.0.0-rc.3",
     "cli-progress": "^3.6.0",
     "core-js": "^3.6.4",
@@ -27,16 +28,18 @@
     "express": "^4.17.1",
     "express-list-endpoints": "^4.0.1",
     "log4js": "^6.1.1",
-    "mongoose": "^5.8.11",
-    "puppeteer": "^2.1.0",
-    "url-parse": "^1.4.7",
+    "mongoose": "^5.9.1",
+    "puppeteer": "^2.1.1",
+    "randomcolor": "^0.5.4",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
     "vue-router": "^3.1.5",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.2",
+    "typescript": "~3.7.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.0",
+    "@vue/cli-plugin-typescript": "^4.2.0",
     "@vue/cli-plugin-eslint": "^4.2.0",
     "@vue/cli-service": "^4.2.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
@@ -46,6 +49,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "vue-property-decorator": "^8.4.0"
   }
 }

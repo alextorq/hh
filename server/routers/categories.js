@@ -6,6 +6,7 @@ const mongoose = require(`${appRoot}/db/connection`);
 const router = express.Router();
 const Category = require(`${appRoot}/db/models/categories`);
 
+
 const logger = log4js.getLogger('cheese');
 
 
@@ -27,7 +28,53 @@ router.get('/list', async (request, response) => {
 
 router.get('/list_with_vacancies', async (request, response) => {
   try {
-    const results = await Category.find().populate('vacancies').exec();
+    const results = await Category.aggregate([
+      {
+        $limit: 100,
+      },
+      {
+        $lookup: {
+          from: 'vacancies',
+          localField: '_id',
+          foreignField: 'category',
+          as: 'vacancies',
+        },
+      },
+      {
+        $lookup: {
+          from: 'specializations',
+          localField: '_id',
+          foreignField: 'category',
+          as: 'specializations',
+        },
+      },
+    ]);
+
+    // const results = await Category.find({}).populate('vacancies');
+    response.send(results);
+  } catch (err) {
+    errorHandler(err, response);
+  }
+});
+
+
+router.get('/list_with_specialization', async (request, response) => {
+  try {
+    const results = await Category.aggregate([
+      {
+        $limit: 100,
+      },
+      {
+        $lookup: {
+          from: 'specializations',
+          localField: '_id',
+          foreignField: 'category',
+          as: 'specializations',
+        },
+      },
+    ]);
+
+    // const results = await Category.find({}).populate('vacancies');
     response.send(results);
   } catch (err) {
     errorHandler(err, response);
