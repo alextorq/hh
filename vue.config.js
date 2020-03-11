@@ -7,6 +7,7 @@ module.exports = {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './server/front/src'),
+        db: path.resolve(__dirname, './db'),
         vue$: 'vue/dist/vue.runtime.esm.js',
       },
     },
