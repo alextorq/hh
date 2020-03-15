@@ -1,6 +1,9 @@
 <template>
   <div style="position: relative;">
-    <el-input placeholder="Please input" class="average-price" v-model="averagePrice"></el-input>
+    <el-input
+        placeholder="Please input"
+        class="average-price"
+        v-model="averagePrice"></el-input>
     <canvas ref="chart"></canvas>
     <el-table
       :data="infoAdapt"
