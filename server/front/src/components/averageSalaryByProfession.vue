@@ -42,7 +42,7 @@ export default {
   props: ['info'],
   data() {
     return {
-
+      averagePrice: 60000,
     }
   },
   computed: {
