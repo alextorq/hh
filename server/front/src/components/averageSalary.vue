@@ -4,6 +4,7 @@
         placeholder="Please input"
         class="average-price"
         v-model="averagePrice"></el-input>
+
     <canvas ref="chart"></canvas>
     <el-table
       :data="infoAdapt"

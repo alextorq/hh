@@ -2,31 +2,33 @@
   <div class="hello">
     <el-container>
       <el-header>
-        <el-select v-model="value" placeholder="Select">
-          <el-option
-            v-for="item in categories"
-            :key="item._id"
-            :label="item.title"
-            :value="item._id">
-          </el-option>
-        </el-select>
       </el-header>
       <el-main>
         <el-tabs type="card">
+
           <el-tab-pane label="Price">
             <div style="width:80vw; position: relative;">
-              <averageSalary :info="adaptCaregoriesWithVacancies" v-if="adaptCaregoriesWithVacancies.length"/>
+              <averageSalary
+                :info="adaptCaregoriesWithVacancies"
+                v-if="adaptCaregoriesWithVacancies.length"/>
             </div>
           </el-tab-pane>
+
           <el-tab-pane label="Amount">
             <div style="width: 80vw; position: relative;">
-              <AmountVacancies :info="categories" v-if="categories.length"/>
+              <AmountVacancies
+                :info="categories"
+                v-if="categories.length"/>
             </div>
           </el-tab-pane>
 
           <el-tab-pane label="Profession">
-            <div style="width: 80vw; position: relative;">
-              <averageSalaryByProfession :info="adaptCaregoriesWithVacancies" v-if="adaptCaregoriesWithVacancies.length"/>
+            <div style="width: 95vw; position: relative;">
+              <averageSalaryByProfession
+                :categories="categories"
+                :vacancies="vacancies"
+                :categorySpecialization="categorySpecialization"
+                v-if="adaptCaregoriesWithVacancies.length"/>
             </div>
           </el-tab-pane>
 
@@ -51,8 +53,8 @@
         vacancies: [],
         midlle: {},
         adaptCaregoriesWithVacancies: [],
+        categorySpecialization: [],
         activeName: 'first',
-        value: '',
       };
     },
     components: {
@@ -63,12 +65,13 @@
     async mounted() {
       this.categories = await getCategories();
       this.vacancies = await getVacancies();
-      // console.log(await getCategoriesWithSpecialization());
+      const categorySpecialization =  await getCategoriesWithSpecialization()
+      this.categorySpecialization = categorySpecialization.map(item => Object.freeze(item));
       const caregoriesWithVacancies = await getCategoriesWithVacancies();
       this.midlle = caregoriesWithVacancies;
 
       this.adaptCaregoriesWithVacancies = Object.freeze(adaptProf(caregoriesWithVacancies));
-      console.log(this.adaptCaregoriesWithVacancies)
+      // console.log(this.adaptCaregoriesWithVacancies)
     },
   };
 </script>

@@ -1,14 +1,29 @@
 <template>
   <div style="position: relative;">
-    <el-input placeholder="Please input" class="average-price" v-model="averagePrice"></el-input>
+    <el-select v-model="value"
+               @change="debug"
+               placeholder="Select">
+      <el-option
+        v-for="item in categories"
+        :key="item._id"
+        :label="item.title"
+        :value="item._id">
+      </el-option>
+    </el-select>
+    <el-alert
+      v-if="!value"
+      title="Выберете категорию"
+      type="success">
+    </el-alert>
     <canvas ref="chart"></canvas>
     <el-table
+      v-if="value"
       :data="infoAdapt"
       border
       height="450">
       <el-table-column
         prop="title"
-        label="Область">
+        label="Специализация">
       </el-table-column>
       <el-table-column
         prop="averagePrice"
@@ -34,15 +49,17 @@
 <script>
 import Chart from 'chart.js';
 import randomColor from 'randomcolor'
-import { formatPrice } from '../utils/price';
-
+import adaptProf from '../utils/midle';
+import {formatPrice} from '../utils/price'
+let chart;
 
 export default {
   name: 'averageSalary',
-  props: ['info'],
+  props: ['vacancies', 'categories', 'categorySpecialization'],
   data() {
     return {
-      averagePrice: 60000,
+      value: '',
+      info: [],
     }
   },
   computed: {
@@ -69,11 +86,25 @@ export default {
   },
   methods: {
     renderChart(data) {
-      new Chart(this.$refs['chart'], {
+      if (chart) {
+        chart.destroy();
+      }
+      chart = new Chart(this.$refs['chart'], {
         type: 'bar',
         data,
         options: this.options
       });
+    },
+    debug(id) {
+      const category = this.categorySpecialization.find((item) => {
+        return item._id === id;
+      });
+      const { specializations } = category;
+      specializations.map((specialization) => {
+        specialization.vacancies = this.vacancies.filter((vacancy) => {return vacancy.specialization === specialization._id})
+      });
+      this.info = adaptProf(specializations);
+      this.renderChartRef();
     },
     formatData(info) {
       const data = [];
