@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative;">
     <el-select v-model="value"
-               @change="debug"
+               @change="selectCategory"
                placeholder="Select">
       <el-option
         v-for="item in categories"
@@ -20,13 +20,17 @@
       v-if="value"
       :data="infoAdapt"
       border
+      @sort-change="sortChane"
       height="450">
       <el-table-column
         prop="title"
+        sortable
+        :sort-method="sortABC"
         label="Специализация">
       </el-table-column>
       <el-table-column
         prop="averagePrice"
+        sortable
         label="Средняя зарплата">
       </el-table-column>
       <el-table-column
@@ -60,6 +64,10 @@ export default {
     return {
       value: '',
       info: [],
+      sort: {
+        prop: '',
+        order: ''
+      },
     }
   },
   computed: {
@@ -85,6 +93,25 @@ export default {
     },
   },
   methods: {
+    sortABC(a, b) {
+      let collator = new Intl.Collator();
+      return collator.compare(a.title, b.title);
+    },
+    sortChane({ prop, order }) {
+      this.info.sort((a, b) => {
+        if (order === 'descending') {
+          const c = b;
+          b = a;
+          a = c;
+        }
+        if (prop === 'title') {
+          return this.sortABC(a, b);
+        }else {
+          return a.averagePrice - b.averagePrice
+        }
+      });
+      this.renderChartRef();
+    },
     renderChart(data) {
       if (chart) {
         chart.destroy();
@@ -95,7 +122,7 @@ export default {
         options: this.options
       });
     },
-    debug(id) {
+    selectCategory(id) {
       const category = this.categorySpecialization.find((item) => {
         return item._id === id;
       });
@@ -135,9 +162,6 @@ export default {
     },
   },
   watch: {
-    averagePrice() {
-      this.renderChartRef();
-    }
   },
   mounted() {
     this.renderChartRef();
