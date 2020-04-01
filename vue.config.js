@@ -1,8 +1,15 @@
 const path = require('path');
+const launchMiddleware = require('launch-editor-middleware');
+
 
 module.exports = {
   lintOnSave: false,
   configureWebpack: {
+    devServer: {
+      before(app) {
+        app.use('/__open-in-editor', launchMiddleware('/home/alex/binar/webstorm'));
+      },
+    },
     entry: path.resolve(__dirname, './server/front/src/main.ts'),
     resolve: {
       alias: {

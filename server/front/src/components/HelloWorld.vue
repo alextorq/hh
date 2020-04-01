@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
     <el-container>
-      <el-header>
-      </el-header>
       <el-main>
         <el-tabs type="card">
 
