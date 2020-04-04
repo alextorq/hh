@@ -3,6 +3,7 @@ node_modules
 /dist
 logs
 server/public
+output.js
 
 # local env files
 .env.local
