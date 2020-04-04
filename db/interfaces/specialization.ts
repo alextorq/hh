@@ -1,6 +1,6 @@
 import  {Document} from 'mongoose';
 
-interface IVacancies extends  Document{
+interface ISpecialization  extends  Document{
   link: string,
   title: string,
   company: string,
@@ -9,4 +9,4 @@ interface IVacancies extends  Document{
   specialization: Array<any>
 }
 
-export default IVacancies;
+export default ISpecialization;
