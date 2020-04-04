@@ -28,6 +28,7 @@ import Chart from "chart.js";
 import randomColor from "randomcolor";
 let chart;
 
+
 export default {
     name: "AmountVacancies",
     data() {

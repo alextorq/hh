@@ -1,8 +1,8 @@
 const path = require('path');
 const launchMiddleware = require('launch-editor-middleware');
 
-
 module.exports = {
+  outputDir: path.resolve(__dirname, './server/public'),
   lintOnSave: false,
   configureWebpack: {
     devServer: {

@@ -2,6 +2,7 @@
 node_modules
 /dist
 logs
+server/public
 
 # local env files
 .env.local

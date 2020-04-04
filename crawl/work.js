@@ -140,6 +140,12 @@ async function getPagination(listOfProfessions) {
 async function scrapeSpecialization(listOfProfessions) {
 
   function getSpecialization(config) {
+    function checkElement() {
+      return document.body.contains(config.PARSER_SELECTOR_SPECIALIZATION)
+    }
+    if (!checkElement()) {
+      return null
+    }
     const specialization = Array.from(document.querySelectorAll(config.PARSER_SELECTOR_SPECIALIZATION));
     return specialization.map((item) => {
       const title = (item.querySelector(config.PARSER_SELECTOR_SPECIALIZATION_NAME)
@@ -162,6 +168,10 @@ async function scrapeSpecialization(listOfProfessions) {
   for (const item of listOfProfessions) {
     await page.goto(item.link, { waitUntil: 'domcontentloaded' });
     const data = await page.evaluate(getSpecialization, env);
+    if (data === null) {
+      /*eslint no-unreachable:0*/
+      throw new Error(`warning element not found selector: ${env.PARSER_SELECTOR_SPECIALIZATION}`);
+    }
 
     const filterData = data.filter((item) => {
         return item.link && item.title;
@@ -174,8 +184,7 @@ async function scrapeSpecialization(listOfProfessions) {
 
 
 async function scrapeProfessions() {
-  await page.goto(env.PARSER_INIT_URL);
-  await page.waitForSelector(env.PARSER_SELECTOR_PROFESSIONS_WAITFOR);
+  await page.goto(env.PARSER_INIT_URL, { waitUntil: 'domcontentloaded' });
 
 /*eslint max-len:0*/
   function getProfessions(env) {

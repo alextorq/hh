@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://127.0.0.1:4001/';
+const host = process.env.prodaction ? '/': 'http://127.0.0.1:4001/';
 
 export function getCategories() {
   return axios.get(`${host}category/list`).then((response) => Object.freeze(response.data));

@@ -27,9 +27,7 @@
     ]
   },
   "include": [
-    "server/front/src/**/*.ts",
-    "server/front/src/**/*.tsx",
-    "server/front/src/**/*.vue"
+    "./server"
   ],
   "exclude": [
     "node_modules"

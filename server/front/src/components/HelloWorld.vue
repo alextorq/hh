@@ -62,7 +62,8 @@
     },
     async mounted() {
       this.categories = await getCategories();
-      this.vacancies = await getVacancies();
+      const vacancies = await getVacancies();
+      this.vacancies = vacancies.map((item) => Object.freeze(item));
       const categorySpecialization =  await getCategoriesWithSpecialization()
       this.categorySpecialization = categorySpecialization.map(item => Object.freeze(item));
       const caregoriesWithVacancies = await getCategoriesWithVacancies();
