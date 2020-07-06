@@ -6,8 +6,9 @@ module.exports = {
   lintOnSave: false,
   configureWebpack: {
     devServer: {
+      proxy: 'http://localhost:4001',
       before(app) {
-        app.use('/__open-in-editor', launchMiddleware('/home/alex/binar/webstorm'));
+        app.use('/__open-in-editor', launchMiddleware('webstorm'));
       },
     },
     entry: path.resolve(__dirname, './server/front/src/main.ts'),

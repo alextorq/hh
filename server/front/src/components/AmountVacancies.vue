@@ -95,7 +95,7 @@ export default {
             data: data.data,
             backgroundColor: data.backgroundColor,
             borderWidth: 1,
-            label: 'Amount Industry',
+            label: 'Количество вакансий',
             fill: false,
           }],
           labels: data.labels,

@@ -17,8 +17,9 @@ const app: Application = express();
 app.listen(env.EXPRESS_PORT);
 
 if (env.RUN_MODE === 'develop') {
-  app.use(corss);
+
 }
+app.use(corss);
 
 app.use(express.static(`${appRoot}/server/public`));
 

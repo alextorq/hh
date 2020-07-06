@@ -4,23 +4,23 @@
       <el-main>
         <el-tabs type="card">
 
-          <el-tab-pane label="Price">
-            <div style="width:80vw; position: relative;">
+          <el-tab-pane label="Заплаты">
+            <div style="width:95vw; position: relative;">
               <averageSalary
                 :info="adaptCaregoriesWithVacancies"
                 v-if="adaptCaregoriesWithVacancies.length"/>
             </div>
           </el-tab-pane>
 
-          <el-tab-pane label="Amount">
-            <div style="width: 80vw; position: relative;">
+          <el-tab-pane label="Количество вакансий">
+            <div style="width: 95vw; position: relative;">
               <AmountVacancies
                 :info="categories"
                 v-if="categories.length"/>
             </div>
           </el-tab-pane>
 
-          <el-tab-pane label="Profession">
+          <el-tab-pane label="Специализации">
             <div style="width: 95vw; position: relative;">
               <averageSalaryByProfession
                 :categories="categories"

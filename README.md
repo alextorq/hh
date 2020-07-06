@@ -1,4 +1,9 @@
-# bigdata
+# Bigdata
+
+```
+required
+redis node mongodb 
+```
 
 ---
 
@@ -6,11 +11,11 @@ It`s just visialization salary and amount of vacancies by site hh
 
 ![Image description](http://i.imgur.com/E9QA2pw.png)
 
-## Project setup
+### Project setup
 ```
 yarn install
 ```
-## Before run 
+### Before run 
 You need parse date from site (look at .env) where define 
 initial url for crawl for this type
 ```

@@ -1,7 +1,8 @@
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 
+const { Schema } = mongoose;
 
-const SpecializationSchema: Schema = new Schema({
+const SpecializationSchema = new Schema({
   link: {
     type: String,
     required: false,
@@ -22,4 +23,4 @@ const SpecializationSchema: Schema = new Schema({
 
 const Specialization = mongoose.model('Specialization', SpecializationSchema, 'specializations');
 
-export default Specialization;
+module.exports = Specialization;

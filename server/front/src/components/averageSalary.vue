@@ -143,7 +143,7 @@ export default {
           data: data.data,
           backgroundColor: data.backgroundColor,
           borderWidth: 1,
-          label: 'Arithmetical mean Salary',
+          label: 'Средняя заработная плата',
           fill: false,
         }],
         labels: data.labels,

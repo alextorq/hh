@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const {URL} = require('url');
+const { URL } = require('url');
 const dotenv = require('dotenv');
 const appRoot = require('app-root-path');
 
@@ -141,7 +141,7 @@ async function scrapeSpecialization(listOfProfessions) {
 
   function getSpecialization(config) {
     function checkElement() {
-      return document.body.contains(config.PARSER_SELECTOR_SPECIALIZATION)
+      return document.querySelector(config.PARSER_SELECTOR_SPECIALIZATION)
     }
     if (!checkElement()) {
       return null
