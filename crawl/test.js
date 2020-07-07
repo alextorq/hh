@@ -1,31 +1,8 @@
 const puppeteer = require('puppeteer');
 const { URL } = require('url');
 const dotenv = require('dotenv');
-const appRoot = require('app-root-path');
-const { getVacancies, getSize, getSpecialization, getProfessions } = require('./utils')
-const mongoose = require('./connection');
-
-const Vacancy = require(`${appRoot}/db/models/vacancies`);
-const Category = require(`${appRoot}/db/models/categories`);
-const Specialization = require(`${appRoot}/db/models/specialization.js`);
 const dotenvParseVariables = require('dotenv-parse-variables');
-const cliProgress = require('cli-progress');
-
-
-const multibar = new cliProgress.MultiBar({
-  clearOnComplete: false,
-  hideCursor: true,
-}, cliProgress.Presets.shades_grey);
-
-const prepare = multibar.create(100, 0, {
-  format: 'prepare [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
-});
-const scrabeBar = multibar.create(100, 0, {
-  format: 'scrabe [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
-});
-const savedBar = multibar.create(100, 0, {
-  format: 'saved [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
-});
+const { getVacancies, getSize, getSpecialization, getProfessions } = require('./utils')
 
 
 let env = dotenv.config({});
@@ -34,8 +11,8 @@ env = dotenvParseVariables(env.parsed);
 let browser;
 let page;
 const ignoredTypes = ['stylesheet', 'font', 'image', 'media', 'texttrack', 'manifest', 'websocket'];
-const blackListDomains = ['https://mc.yandex.ru/metrika/watch.js', 'https://statad.ru/pixel.gif',
-  'https://spb.hh.ru/analytics', 'https://spb.hh.ru/stat?url='];
+const blackListDomains = ['https://mc.yandex.ru/metrika/watch.js',
+  'https://statad.ru/pixel.gif', 'https://spb.hh.ru/analytics', 'https://spb.hh.ru/stat?url='];
 
 function checkInBlackList(url = '') {
   let status = false;
@@ -48,23 +25,12 @@ function checkInBlackList(url = '') {
 }
 
 async function scrapeVacancies(listOfProfessions) {
-  const jobsAmount = listOfProfessions.reduce((accum, item) => {
-    const specialization = item.specialization;
-    for (const specializationItem of specialization) {
-      accum += specializationItem.pages.length;
-    }
-    return accum;
-  }, 0);
-
-  scrabeBar.setTotal(jobsAmount);
-
   for (const profession of listOfProfessions) {
     for (const specialization of profession.specialization) {
       for (const specializationPage of specialization.pages) {
         try {
           await page.goto(specializationPage, { waitUntil: 'domcontentloaded' });
           const jobs = await page.evaluate(getVacancies, env);
-          scrabeBar.increment();
           specialization.jobs.push(...jobs);
         } catch (e) {
           console.error(e);
@@ -89,8 +55,6 @@ async function getPagination(listOfProfessions) {
     return pages;
   }
 
-  prepare.setTotal(listOfProfessions.length);
-
   for (const profession of listOfProfessions) {
     for (const specialization of profession.specialization) {
       const pageURL = new URL(specialization.link);
@@ -104,7 +68,6 @@ async function getPagination(listOfProfessions) {
         specialization.pages.push(specialization.link);
       }
     }
-    prepare.increment();
   }
 }
 
@@ -113,47 +76,24 @@ async function scrapeSpecialization(listOfProfessions) {
   for (const item of listOfProfessions) {
     await page.goto(item.link, { waitUntil: 'domcontentloaded' });
     const data = await page.evaluate(getSpecialization, env);
+
     const filterData = data.filter((item) => {
-        return item.link && item.title;
+      return item.link && item.title;
     });
+
+    if (filterData[0].title !== 'Розничная торговля') {
+      return throw new Error(`element probably not fount selector: ${env.PARSER_SELECTOR_SPECIALIZATION}`)
+    }
     item.specialization.push(...filterData);
   }
+
 }
 
 
 async function scrapeProfessions() {
   await page.goto(env.PARSER_INIT_URL, { waitUntil: 'domcontentloaded' });
-
-  let listOfProfessions = await page.evaluate(getProfessions, env);
-  listOfProfessions = listOfProfessions.filter((item) => !!item.title && !!item.amountVacancies && !!item.link);
-
-  return listOfProfessions;
-}
-
-async function saveResult(listOfProfessions) {
-  const jobsAmount = listOfProfessions.reduce((accum, item) => {
-    const specialization = item.specialization;
-    for (const specializationItem of specialization) {
-      accum += specializationItem.jobs.length;
-    }
-    return accum;
-  }, 0);
-
-  savedBar.setTotal(jobsAmount);
-
-  for (const profession of listOfProfessions) {
-    const category = await Category.create(profession);
-    for (const specialization of profession.specialization) {
-      const specializationItem = Object.assign(specialization, { category: category._id });
-      const specializationModel = await Specialization.create(specializationItem);
-
-      for (const job of specialization.jobs) {
-        savedBar.increment();
-        const item = Object.assign(job, { category: category._id, specialization: specializationModel._id });
-        await Vacancy.create(item);
-      }
-    }
-  }
+  const listOfProfessions = await page.evaluate(getProfessions, env);
+  return listOfProfessions.filter((item) => !!item.title && !!item.amountVacancies && !!item.link);
 }
 
 async function main() {
@@ -173,12 +113,18 @@ async function main() {
     if (ignoredTypes.includes(req.resourceType()) || checkInBlackList(req.url())) {
       req.abort();
     } else {
+      // console.log(req.resourceType())
+      // console.log(req.url())
       req.continue();
     }
   });
 
   try {
     const profs = await scrapeProfessions();
+    if (profs[0].title !== 'Продажи') {
+      throw new Error(`element probably not fount selector: ${env.PARSER_SELECTOR_PROFESSIONS_ITEMS}`)
+    }
+
     await scrapeSpecialization(profs);
     await getPagination(profs);
     await scrapeVacancies(profs);
