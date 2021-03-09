@@ -1,5 +1,5 @@
 const express = require('express');
-import {Application} from 'express'
+import {Application} from 'express';
 const appRoot = require('app-root-path');
 const listEndpoints = require('express-list-endpoints');
 const dotenvParseVariables = require('dotenv-parse-variables');
@@ -17,11 +17,11 @@ const app: Application = express();
 app.listen(env.EXPRESS_PORT);
 
 if (env.RUN_MODE === 'develop') {
-
+  app.use(express.static(`${appRoot}/server/public`));
 }
+
 app.use(corss);
 
-app.use(express.static(`${appRoot}/server/public`));
 
 app.use('/category', cache);
 app.use('/vacancy', cache);

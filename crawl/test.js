@@ -77,16 +77,12 @@ async function scrapeSpecialization(listOfProfessions) {
     await page.goto(item.link, { waitUntil: 'domcontentloaded' });
     const data = await page.evaluate(getSpecialization, env);
 
-    const filterData = data.filter((item) => {
-      return item.link && item.title;
+    const filterData = data.filter((itemw) => {
+      return itemw.link && itemw.title;
     });
 
-    if (filterData[0].title !== 'Розничная торговля') {
-      return throw new Error(`element probably not fount selector: ${env.PARSER_SELECTOR_SPECIALIZATION}`)
-    }
     item.specialization.push(...filterData);
   }
-
 }
 
 
@@ -113,14 +109,15 @@ async function main() {
     if (ignoredTypes.includes(req.resourceType()) || checkInBlackList(req.url())) {
       req.abort();
     } else {
-      // console.log(req.resourceType())
-      // console.log(req.url())
       req.continue();
     }
   });
 
   try {
     const profs = await scrapeProfessions();
+    if (!profs.length) {
+      throw Error('Not found list of prof');
+    }
     if (profs[0].title !== 'Продажи') {
       throw new Error(`element probably not fount selector: ${env.PARSER_SELECTOR_PROFESSIONS_ITEMS}`)
     }

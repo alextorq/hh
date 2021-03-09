@@ -110,14 +110,19 @@ async function getPagination(listOfProfessions) {
 
 
 async function scrapeSpecialization(listOfProfessions) {
-  for (const item of listOfProfessions) {
-    await page.goto(item.link, { waitUntil: 'domcontentloaded' });
-    const data = await page.evaluate(getSpecialization, env);
-    const filterData = data.filter((item) => {
+  try {
+    for (const item of listOfProfessions) {
+      await page.goto(item.link, { waitUntil: 'domcontentloaded' });
+      const data = await page.evaluate(getSpecialization, env);
+      const filterData = data.filter((item) => {
         return item.link && item.title;
-    });
-    item.specialization.push(...filterData);
+      });
+      item.specialization.push(...filterData);
+    }
+  }catch (e) {
+    console.error(e)
   }
+
 }
 
 
