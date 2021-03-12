@@ -10,7 +10,8 @@
     "watch": "npx nodemon -e ts --exec \"npm run start\"",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "empty": "node ./crawl/empty.js"
   },
   "keywords": [],
   "author": "",
