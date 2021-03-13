@@ -19,3 +19,4 @@ async function cache(request: Request, response: Response, next: NextFunction) {
 }
 
 module.exports = cache;
+
