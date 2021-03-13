@@ -23,10 +23,10 @@ if (env.RUN_MODE === 'develop') {
 app.use(corss);
 
 
-app.use('/category', cache);
-app.use('/vacancy', cache);
+app.use('api/category', cache);
+app.use('api/vacancy', cache);
 
-app.use('/category', CategoryRoutes);
-app.use('/vacancy', VacancyRoutes);
+app.use('api/category', CategoryRoutes);
+app.use('api/vacancy', VacancyRoutes);
 
 console.log(listEndpoints(app));
