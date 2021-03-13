@@ -22,10 +22,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - run: npm cache clean --force
+      - run: rm -rf ./node_modules
       - run: npm ci
 #      - run: npm run empty
 #      - run: npm run crawl
-      - run: mkdir -p ./public
+     # - run: mkdir -p ./public
       - run: npm run build
       - run: rsync -a "$PWD" ~/projects/
       - run: pm2 restart all
